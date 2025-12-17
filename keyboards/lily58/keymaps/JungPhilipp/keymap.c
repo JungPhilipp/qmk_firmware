@@ -39,7 +39,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      | PgUp |BackSp|  Up  | Del  |PgDown|                    |   *  |   7  |   8  |   9  |  -   |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      | Home | Left | Down |Right | End  |-------.    ,-------|   /  |   4  |   5  |   6  |  +   |   ,  |
+ * |      | Home | Left | Down |Right | End  |-------.    ,-------|   /  |   4  |   5  |   6  |  +   |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |Insert|      |      |      |      |-------|    |-------|   0  |   1  |   2  |   3  |  .   |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_MOV] = LAYOUT(
   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   _______, KC_PGUP, KC_BSPC, KC_UP  , KC_DEL,  KC_PGDN,                   KC_PAST, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, _______,
-  _______, KC_HOME, KC_LEFT, KC_DOWN, KC_RGHT, KC_END,                    KC_PSLS, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_PCMM,
+  _______, KC_HOME, KC_LEFT, KC_DOWN, KC_RGHT, KC_END,                    KC_PSLS, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, _______,
   _______, KC_INS , _______, _______, _______, _______, _______, _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PDOT, _______,
                              _______, _______, _______, _______, _______,  _______, _______, _______
 ),
@@ -133,7 +133,7 @@ bool oled_task_user(void) {
     oled_write_ln(read_keylogs(), false);
     //oled_write_ln(read_mode_icon(keymap_config.swap_lalt_lgui), false);
     //oled_write_ln(read_host_led_state(), false);
-    //oled_write_ln(read_timelog(), false);
+    //oled_write_ln(read_timelog(), false)
   } else {
     oled_write(read_logo(), false);
   }
