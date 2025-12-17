@@ -9,6 +9,14 @@ enum layer_number {
   _ADJUST,
 };
 
+enum custom_keycodes {
+    DE_AE = SAFE_RANGE, // ä
+    DE_OE,              // ö
+    DE_UE,              // ü
+    DE_SS               // ß (sharp s)
+};
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* QWERTY
@@ -57,23 +65,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* SYMBOLS
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  `   |  @   |M Prev|M Play|M Next|M Stop|                    | V Do | Mute | V Up |      | Caps | Num  |
+ * |  `   |  @   |M Prev|M Play|M Next|M Stop|                    | V Do | Mute | V Up | Caps |  ß   | Num  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |  '   |  (   |  =   |  )   |  -   |                    |      |      |      |      |  UE  |      |
+ * |      |  '   |  (   |  =   |  )   |  -   |                    |      |      |      |      |  ü   |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |  #   |  [   |  |   |  ]   |  +   |-------.    ,-------|      |      |      |      |  OE  |      |
+ * |      |  #   |  [   |  |   |  ]   |  +   |-------.    ,-------|      |      |      |      |  ö   |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |  \   |  {   |  &   |  }   |  /   |-------|    |-------|      |      |      |      |  AE  |      |
+ * |      |  \   |  {   |  &   |  }   |  /   |-------|    |-------|      |      |      |      |  ä   |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   | LAlt | LGUI |  MOV | /Space  /       \Enter \  |  SYM |BackSP| LAlt |
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
 [_SYM] = LAYOUT(
-   KC_GRV, UK_AT,   KC_MPRV, KC_MPLY, KC_MNXT, KC_MSTP,                     KC_VOLD, KC_MUTE, KC_VOLU, _______, KC_CAPS, KC_NUM ,
-  _______, KC_QUOT, KC_LPRN, KC_EQL , KC_RPRN, KC_MINS,                     _______, _______, _______, _______, _______, _______,
-  _______, KC_NUHS, KC_LBRC, UK_PIPE, KC_RBRC, KC_PLUS,                     _______, _______, _______, _______, _______, _______,
-  _______, KC_NUBS, KC_LCBR, KC_AMPR, KC_RCBR, KC_SLSH,  _______, _______,  _______, _______, _______, _______, _______, _______,
+   KC_GRV, UK_AT,   KC_MPRV, KC_MPLY, KC_MNXT, KC_MSTP,                     KC_VOLD, KC_MUTE, KC_VOLU, KC_CAPS, DE_SS  , KC_NUM ,
+  _______, KC_QUOT, KC_LPRN, KC_EQL , KC_RPRN, KC_MINS,                     _______, _______, _______, _______, DE_UE  , _______,
+  _______, KC_NUHS, KC_LBRC, UK_PIPE, KC_RBRC, KC_PLUS,                     _______, _______, _______, _______, DE_OE  , _______,
+  _______, KC_NUBS, KC_LCBR, KC_AMPR, KC_RCBR, KC_SLSH,  _______, _______,  _______, _______, _______, _______, DE_AE  , _______,
                              _______, _______, _______,  _______, _______,  _______, _______, _______
 ),
 
@@ -142,11 +150,57 @@ bool oled_task_user(void) {
 #endif // OLED_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-#ifdef OLED_ENABLE
-    set_keylog(keycode, record);
-#endif
-    // set_timelog();
-  }
-  return true;
+    if (!record->event.pressed)
+        return true;
+    // Detect if the result should be uppercase
+    bool is_shifted = (get_mods() & MOD_MASK_SHIFT);
+    bool is_caps    = host_keyboard_led_state().caps_lock;
+
+    // XOR logic: Shift and Caps Lock together usually result in lowercase
+    bool use_upper = is_shifted ^ is_caps;
+
+    switch (keycode) {
+        case DE_AE: // ä / Ä
+            if (use_upper) {
+                del_mods(MOD_MASK_SHIFT);    // Clean shift for dead key
+                SEND_STRING(SS_ALGR("2"));   // Dead key: AltGr + 2
+                add_mods(MOD_MASK_SHIFT);    // Apply shift for the letter
+                SEND_STRING("a");
+            } else {
+                SEND_STRING(SS_ALGR("2") "a");
+            }
+            return false;
+
+        case DE_OE: // ö / Ö
+            if (use_upper) {
+                del_mods(MOD_MASK_SHIFT);
+                SEND_STRING(SS_ALGR("2"));
+                add_mods(MOD_MASK_SHIFT);
+                SEND_STRING("o");
+            } else {
+                SEND_STRING(SS_ALGR("2") "o");
+            }
+            return false;
+
+        case DE_UE: // ü / Ü
+            if (use_upper) {
+                del_mods(MOD_MASK_SHIFT);
+                SEND_STRING(SS_ALGR("2"));
+                add_mods(MOD_MASK_SHIFT);
+                SEND_STRING("u");
+            } else {
+                SEND_STRING(SS_ALGR("2") "u");
+            }
+            return false;
+
+        case DE_SS: // ß / ẞ
+            // Sharp S capitalization logic (ẞ is usually AltGr + Shift + s)
+            if (use_upper) {
+                SEND_STRING(SS_ALGR("S"));
+            } else {
+                SEND_STRING(SS_ALGR("s"));
+            }
+            return false;
+    }
+    return true;
 }
