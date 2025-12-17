@@ -193,13 +193,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
-        case DE_SS: // ß / ẞ
-            // Sharp S capitalization logic (ẞ is usually AltGr + Shift + s)
-            if (use_upper) {
-                SEND_STRING(SS_ALGR("S"));
-            } else {
-                SEND_STRING(SS_ALGR("s"));
-            }
+        case DE_SS: // ß
+            SEND_STRING(SS_ALGR("s"));
             return false;
     }
     return true;
