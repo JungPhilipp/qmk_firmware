@@ -65,9 +65,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* SYMBOLS
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  `   |  @   |M Prev|M Play|M Next|M Stop|                    | V Do | Mute | V Up | Caps |  ß   | Num  |
+ * |  `   |  @   |M Prev|M Play|M Next|M Stop|                    | V Do | Mute | V Up |      |  ß   | Num  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |  '   |  (   |  =   |  )   |  -   |                    | Euro |      |      |      |  ü   |      |
+ * |      |  '   |  (   |  =   |  )   |  -   |                    | Euro |      |      |      |  ü   | Caps |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |  #   |  [   |  |   |  ]   |  +   |-------.    ,-------|      |      |      |      |  ö   |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
@@ -78,8 +78,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `----------------------------'           '------''--------------------'
  */
 [_SYM] = LAYOUT(
-   KC_GRV, UK_AT,   KC_MPRV, KC_MPLY, KC_MNXT, KC_MSTP,                     KC_VOLD, KC_MUTE, KC_VOLU, KC_CAPS, DE_SS  , KC_NUM ,
-  _______, KC_QUOT, KC_LPRN, KC_EQL , KC_RPRN, KC_MINS,                     UK_EURO, _______, _______, _______, DE_UE  , _______,
+   KC_GRV, UK_AT,   KC_MPRV, KC_MPLY, KC_MNXT, KC_MSTP,                     KC_VOLD, KC_MUTE, KC_VOLU, _______, DE_SS  , KC_NUM ,
+  _______, KC_QUOT, KC_LPRN, KC_EQL , KC_RPRN, KC_MINS,                     UK_EURO, _______, _______, _______, DE_UE  , KC_CAPS,
   _______, KC_NUHS, KC_LBRC, UK_PIPE, KC_RBRC, KC_PLUS,                     _______, _______, _______, _______, DE_OE  , _______,
   _______, KC_NUBS, KC_LCBR, KC_AMPR, KC_RCBR, KC_SLSH,  _______, _______,  _______, _______, _______, _______, DE_AE  , _______,
                              _______, _______, _______,  _______, _______,  _______, _______, _______
